@@ -21,4 +21,6 @@ from core import views as core_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', core_views.UserRegisterationAPIView.as_view(), name='user_register'),
+    path('request-count/', core_views.RequestCounterAPIView.as_view(), name='request_count'),
+    path('request-count/reset/', core_views.RequestCounterResetAPIView.as_view(), name='request_count_reset'),
 ]
