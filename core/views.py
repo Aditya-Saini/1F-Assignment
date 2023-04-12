@@ -26,6 +26,9 @@ class UserRegisterationAPIView(GenericAPIView):
         data["tokens"] = {"access": str(token.access_token)}
         return Response(data['tokens'], status=status.HTTP_201_CREATED)
 
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = serializer.MyTokenObtainPairSerializer
+
 class RequestCounterAPIView(GenericAPIView):
     """
     An endpoint to get request count.
