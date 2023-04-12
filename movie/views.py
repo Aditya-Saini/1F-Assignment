@@ -1,11 +1,10 @@
-from django.shortcuts import render
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-import requests
-from .models import Collection, Movie
-from .serializer import CollectionSerializer, MovieSerializer
+from .models import Collection
+from .serializer import CollectionSerializer
+from .lib.services import third_party_api, favourite_genre
 
 # Create your views here.
 class MovieListAPIView(GenericAPIView):
@@ -15,20 +14,7 @@ class MovieListAPIView(GenericAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, req):
-        page = req.GET.get("page","")
-        host = "http://localhost:8000/movie/?page="
-        partner_api_req = requests.get("https://demo.credy.in/api/v1/maya/movies/")
-        if(partner_api_req.status_code!=200):
-            while partner_api_req.status_code==200:
-                partner_api_req = requests.get("https://demo.credy.in/api/v1/maya/movies/")
-        response_data = partner_api_req.json()
-        if page!="":
-            response_data["next"] = host+str(int(page)+1)
-            if int(page)>1:
-                response_data["previous"] = host+str(int(page)-1)
-        else:
-            response_data["next"] = host+"2"
-            
+        response_data = third_party_api(req)
         return Response(response_data, status=status.HTTP_200_OK)
 
 class CollectionView(GenericAPIView):
@@ -40,6 +26,21 @@ class CollectionView(GenericAPIView):
         collection = serializer.save()
         return Response({"collection_uuid": collection.uuid}, status=status.HTTP_201_CREATED)
 
+    def get(self, request):
+        try:
+            collection_list = Collection.objects.filter(user = request.user).values("title", "uuid", "description")
+            fav_genre = favourite_genre(collection_list)
+            response = {
+                "is_success": True,
+                "data":{
+                    "collections":collection_list
+                },
+                "favourite_genres": fav_genre
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"message":"Cannot fetch collection"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class CollectionRUDAView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CollectionSerializer
@@ -47,4 +48,4 @@ class CollectionRUDAView(RetrieveUpdateDestroyAPIView):
         try:
             return Collection.objects.all()
         except Exception as e:
-            return "None"
+            return Response({"message":"Cannot fetch collection"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
