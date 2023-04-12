@@ -1,16 +1,19 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import requests
+from .models import Collection, Movie
+from .serializer import CollectionSerializer, MovieSerializer
 
 # Create your views here.
 class MovieListAPIView(GenericAPIView):
     """
-    An endpoint to get Movie List.
+    An endpoint to get Movie List from 3rd party API.
     """
     permission_classes = (IsAuthenticated,)
+
     def get(self, req):
         page = req.GET.get("page","")
         host = "http://localhost:8000/movie/?page="
@@ -27,3 +30,12 @@ class MovieListAPIView(GenericAPIView):
             response_data["next"] = host+"2"
             
         return Response(response_data, status=status.HTTP_200_OK)
+
+class CollectionView(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CollectionSerializer
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        collection = serializer.save()
+        return Response({"collection_uuid": collection.uuid}, status=status.HTTP_201_CREATED)
