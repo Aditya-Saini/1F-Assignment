@@ -1,5 +1,6 @@
 # 1F-Assignment
 
+
 ## Tools:
 
 python
@@ -13,6 +14,7 @@ auth(JWT)
 database(SQLite)
 
 postman
+
 
 ## Installation:
 
@@ -42,6 +44,22 @@ PASSWORD(3rd party api auth)
 
 Run the development server: python manage.py runserver
 
+
+## Screeshoots
+
+3rd party api Integration
+
+![image](https://user-images.githubusercontent.com/67433169/231564468-18da26a1-d53a-4474-9e68-89706fc3a449.png)
+
+Collections list
+
+![image](https://user-images.githubusercontent.com/67433169/231565167-89f48f37-5367-47c6-85e3-9b9bac28cabf.png)
+
+List Movies from collection:
+
+![image](https://user-images.githubusercontent.com/67433169/231566455-aef8304d-8956-4038-8b20-47d7410e4712.png)
+
+
 ## Usage:
 
 Check out movies under movies endpoint
@@ -52,7 +70,8 @@ Get your favourite Genre
 
 API provides real-time request count
 
-### Endpoints:
+
+## Endpoints:
 
 
 register/ : To register new users
@@ -70,6 +89,7 @@ collections/ : Creates a collection of movies(POST)
 collections/ : get list of your collection and favourite genre(GET)
 
 collections/uuid/ : Retrieve/Delete/Update your collection
+
 
 ## Testing:
 
