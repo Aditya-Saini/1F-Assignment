@@ -4,7 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Collection
 from .serializer import CollectionSerializer
-from .lib.services import third_party_api, favourite_genre
+from .internal.services import third_party_api
+from .utils import favourite_genre
 
 # Create your views here.
 class MovieListAPIView(GenericAPIView):
@@ -39,7 +40,7 @@ class CollectionView(GenericAPIView):
             }
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"message":"Cannot fetch collection"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"message":"Cannot fetch collection"}, status=status.HTTP_400_BAD_REQUEST)
 
 class CollectionRUDAView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
@@ -48,4 +49,4 @@ class CollectionRUDAView(RetrieveUpdateDestroyAPIView):
         try:
             return Collection.objects.all()
         except Exception as e:
-            return Response({"message":"Cannot fetch collection"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"message":"Cannot fetch collection"}, status=status.HTTP_400_BAD_REQUEST)
