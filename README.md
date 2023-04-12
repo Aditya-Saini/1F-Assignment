@@ -1,6 +1,6 @@
 # 1F-Assignment
 
-##Tools:
+## Tools:
 
 python
 django
@@ -9,7 +9,7 @@ auth(JWT)
 database(SQLite)
 postman
 
-##Installation:
+## Installation:
 
 Clone the repository: git clone https://github.com/Aditya-Saini/1F-Assignment.git
 Create a virtual environment: python3 -m venv env
@@ -25,13 +25,13 @@ USERNAME(3rd party api auth)
 PASSWORD(3rd party api auth)
 Run the development server: python manage.py runserver
 
-##Usage:
+## Usage:
 Check out movies under movies endpoint
 Create different collections of movies
 Get your favourite Genre
 API provides real-time request count
 
-###Endpoints:
+### Endpoints:
 
 register/ : To register new users
 login/ : Get access token
@@ -42,7 +42,7 @@ collections/ : Creates a collection of movies(POST)
 collections/ : get list of your collection and favourite genre(GET)
 collections/uuid/ : Retrieve/Delete/Update your collection
 
-##Testing:
+## Testing:
 
 Unit Testing done using Django Built-in module [File](https://github.com/Aditya-Saini/1F-Assignment/blob/master/movie/test_api.py)
 
