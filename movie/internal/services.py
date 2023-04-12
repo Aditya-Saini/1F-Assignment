@@ -1,4 +1,5 @@
 import requests
+from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 import os
 
@@ -16,10 +17,10 @@ def nav_helper(req, api_data):
     return api_data
 
 def third_party_api(request):
-    partner_api_req = requests.get(os.getenv("THIRD_PARTY_API"))
+    partner_api_req = requests.get(os.getenv("THIRD_PARTY_API"), auth = HTTPBasicAuth(os.getenv("USERNAME"), os.getenv("PASSWORD")))
     if(partner_api_req.status_code!=200):
         while partner_api_req.status_code==200:
-            partner_api_req = requests.get(os.getenv("THIRD_PARTY_API"))
+            partner_api_req = requests.get(os.getenv("THIRD_PARTY_API"), auth = HTTPBasicAuth(os.getenv("USERNAME"), os.getenv("PASSWORD")))
     return nav_helper(request, partner_api_req.json())
     
 
