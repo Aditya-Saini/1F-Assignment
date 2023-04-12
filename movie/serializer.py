@@ -36,6 +36,14 @@ class CollectionSerializer(serializers.ModelSerializer):
         collection = Collection.objects.create(**validated_data)
         for movie_data in movie:
             m, created = Movie.objects.get_or_create(movie_data)
-            if created:
-                collection.movie.add(m)
+            collection.movie.add(m)
         return collection
+    def update(self, instance,validated_data):
+        validated_data["user"] = self.context["request"].user
+        movie = validated_data.pop("movie")
+        instance = super().update(instance, validated_data)
+        for movie_data in movie:
+            m, created = Movie.objects.get_or_create(movie_data)
+            instance.movie.add(m)
+        instance.save()
+        return instance

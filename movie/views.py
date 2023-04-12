@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListCreateAPIView
+from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import requests
@@ -39,3 +39,12 @@ class CollectionView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         collection = serializer.save()
         return Response({"collection_uuid": collection.uuid}, status=status.HTTP_201_CREATED)
+
+class CollectionRUDAView(RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CollectionSerializer
+    def get_queryset(self):
+        try:
+            return Collection.objects.all()
+        except Exception as e:
+            return "None"

@@ -19,5 +19,5 @@ class Collection(CommonInfo):
     title = models.CharField(max_length=255,null=False, blank=False)
     description = models.TextField(null=True, blank=True)
     movie = models.ManyToManyField(Movie)
-    uuid = models.UUIDField()
+    uuid = models.UUIDField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
